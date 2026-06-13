@@ -1,0 +1,13 @@
+{
+  "showCover": true,
+  "startPage": 0,
+  "flippingTime": 800,
+  "drawShadow": true,
+  "maxShadowOpacity": 0.3,
+  "showPageCorners": true,
+  "usePortrait": true,
+  "minWidth": 300,
+  "maxWidth": 1000,
+  "minHeight": 300,
+  "maxHeight": 1000
+}

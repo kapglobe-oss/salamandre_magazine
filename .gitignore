@@ -1,0 +1,13 @@
+# Ignore uploads directory due to large files (PDFs, EXEs)
+uploads/
+
+# System and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# SSH keys
+id_*
+*.pub
+

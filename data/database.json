@@ -1,0 +1,483 @@
+{
+    "admin": {
+        "username": "admin",
+        "password_hash": "$2y$10$79VQZby.7vUmHwbOxfWbWusADw8JFQz.RBhDesO3\/T.AShLmZgvFu"
+    },
+    "magazines": [
+        {
+            "id": "mag-1",
+            "title": "Salamandre Magazine - Numéro 12 : L&amp;amp;#039;Éveil de la Matière",
+            "pdf_path": "uploads\/magazines\/numero_12.pdf",
+            "cover_path": "uploads\/images\/file_6a2c9b6adec362.86459981.jpg",
+            "pub_date": "2026-05-01",
+            "pages": [
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 1,
+                    "widgets": [
+                        {
+                            "id": "w-1781281034218",
+                            "type": "ad",
+                            "subType": "image_ad",
+                            "content": "uploads\/images\/cover.jpg",
+                            "link": "",
+                            "x": 0,
+                            "y": 0,
+                            "w": 100,
+                            "h": 100
+                        }
+                    ]
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 2,
+                    "widgets": [
+                        {
+                            "id": "widget-1",
+                            "type": "ad",
+                            "subType": "image_ad",
+                            "content": "uploads\/images\/berube.png",
+                            "link": "shop.php",
+                            "x": 11,
+                            "y": 2,
+                            "w": 73,
+                            "h": 31,
+                            "fontSize": 14,
+                            "fontColor": "#000000",
+                            "bgColor": "#ffffff",
+                            "opacity": 100,
+                            "borderRadius": 0,
+                            "padding": 10
+                        },
+                        {
+                            "id": "w-1781276152954",
+                            "type": "text",
+                            "subType": "richtext",
+                            "content": "Père monoparental et fier Québécois, Sébastien Bérubé écrit des chansons qui puisent directement dans sa vie. Amours, deuils, résilience et fierté identitaire — il dit tout, sans filtre, avec une guitare et des mots vrais.\n\nAprès avoir fait ses armes avec les groupes Kasto et Polux (avec Éric Tousignant) et Comeback QC (avec Francis Allard), il se lance en solo avec un premier album qui mêle folklore québécois et sonorités rock modernes.",
+                            "link": "",
+                            "x": 38,
+                            "y": 49,
+                            "w": 52,
+                            "h": 50,
+                            "fontSize": 18,
+                            "fontColor": "#000000",
+                            "bgColor": "#ffffff",
+                            "opacity": 100,
+                            "borderRadius": 0,
+                            "padding": 10
+                        },
+                        {
+                            "id": "w-1781276211955",
+                            "type": "text",
+                            "subType": "richtext",
+                            "content": "Biographie Sébastien Bérubé\n<br>« TDH assumé et contrôlé. Je chante ce que je vis. »",
+                            "link": "",
+                            "x": 13,
+                            "y": 33,
+                            "w": 69,
+                            "h": 16,
+                            "fontSize": 22,
+                            "fontColor": "#000000",
+                            "bgColor": "#ffffff",
+                            "opacity": 100,
+                            "borderRadius": 0,
+                            "padding": 10
+                        },
+                        {
+                            "id": "w-1781277418793",
+                            "type": "ad",
+                            "subType": "image_ad",
+                            "content": "uploads\/images\/berube-seb-1.png",
+                            "link": "",
+                            "x": 4,
+                            "y": 50,
+                            "w": 32,
+                            "h": 44
+                        }
+                    ]
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 3,
+                    "widgets": [
+                        {
+                            "id": "w-1781277572795",
+                            "type": "video",
+                            "subType": "mp4",
+                            "content": "uploads\/images\/berube _world7.mp4",
+                            "link": "",
+                            "x": 8,
+                            "y": 2,
+                            "w": 86,
+                            "h": 29
+                        }
+                    ]
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 4,
+                    "widgets": [
+                        {
+                            "id": "widget-2",
+                            "type": "video",
+                            "subType": "youtube",
+                            "content": "https:\/\/www.youtube.com\/embed\/dQw4w9WgXcQ",
+                            "x": 15,
+                            "y": 20,
+                            "w": 70,
+                            "h": 50
+                        }
+                    ]
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 5,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 6,
+                    "widgets": []
+                },
+                {
+                    "type": "custom",
+                    "background": "#faf8f5",
+                    "widgets": []
+                }
+            ]
+        },
+        {
+            "id": "mag-6a2baabd5b937",
+            "title": "Carrefour-50",
+            "pdf_path": "uploads\/magazines\/32-pages-Carrefour-50-format-boomers-2.pdf",
+            "cover_path": "",
+            "pub_date": "2026-03-10",
+            "pages": [
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 1,
+                    "widgets": [
+                        {
+                            "id": "w-1781248382508",
+                            "type": "ad",
+                            "subType": "image_ad",
+                            "content": "uploads\/images\/berube.png",
+                            "link": "",
+                            "x": 0,
+                            "y": 60,
+                            "w": 33,
+                            "h": 25
+                        }
+                    ]
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 2,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 3,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 4,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 5,
+                    "widgets": [
+                        {
+                            "id": "w-1781248598104",
+                            "type": "ad",
+                            "subType": "image_ad",
+                            "content": "uploads\/images\/berube.png",
+                            "link": "",
+                            "x": 0,
+                            "y": 75,
+                            "w": 95,
+                            "h": 12
+                        }
+                    ]
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 6,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 7,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 8,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 9,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 10,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 11,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 12,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 13,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 14,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 15,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 16,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 17,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 18,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 19,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 20,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 21,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 22,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 23,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 24,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 25,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 26,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 27,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 28,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 29,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 30,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 31,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 32,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 33,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 34,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 35,
+                    "widgets": []
+                },
+                {
+                    "type": "pdf",
+                    "pdf_page_num": 36,
+                    "widgets": []
+                }
+            ]
+        },
+        {
+            "id": "mag-6a2c791fe4d2c",
+            "title": "Secret des Huiles Vegetales",
+            "pdf_path": "uploads\/magazines\/Ebook-C-Secret-des-Huiles-Vegetales",
+            "cover_path": "uploads\/images\/file_6a2c9b5ced94f9.34549538.jpg",
+            "pub_date": "2026-05-04",
+            "pages": []
+        }
+    ],
+    "blog": [
+        {
+            "id": "blog-1",
+            "title": "L'Art de l'Écriture : Redécouvrir la Poésie Contemporaine",
+            "slug": "art-de-l-ecriture-poesie-contemporaine",
+            "excerpt": "Dans un monde saturé d'écrans et d'instantanéité, la poésie contemporaine offre une pause contemplative indispensable. Voyage au cœur des mots.",
+            "content": "<p>La poésie n’est pas morte ; elle s’est simplement déplacée. Elle ne loge plus uniquement dans les recueils poussiéreux des bibliothèques d'antan, mais s’immisce dans nos flux numériques, sur les murs de nos villes et dans les interstices de nos quotidiens trépidants.<\/p><h2>Une urgence de lenteur<\/h2><p>Lire un poème en 2026 est un acte de résistance. C’est refuser la dictature du scroll infini pour s’arrêter, ne serait-ce que quelques minutes, sur le rythme d’une phrase, l’écho d’une consonne et la profondeur d'une image métaphorique. Salamandre Magazine s'efforce, depuis sa création, de préserver cet espace de liberté et de lenteur.<\/p><blockquote>« La poésie, c'est ce qui reste dans l'homme lorsqu'il a tout oublié de ce qu'il a appris. »<\/blockquote><p>Dans nos prochains numéros, nous explorerons les œuvres de jeunes poètes québécois et internationaux qui redéfinissent le genre en y mêlant arts visuels et technologies interactives.<\/p>",
+            "image": "uploads\/images\/blog_post_art.png",
+            "tags": [
+                "Poésie",
+                "Écriture",
+                "Littérature"
+            ],
+            "status": "published",
+            "date": "2026-06-05"
+        },
+        {
+            "id": "blog-2",
+            "title": "Portraits d'Artistes : Katia Prpic-Tremblay et l'Art du Trait",
+            "slug": "portrait-artiste-katia-prpic-tremblay",
+            "excerpt": "Découvrez l'univers visuel singulier de la cofondatrice et directrice artistique de Salamandre, où la matière brute rencontre l'élégance de la ligne.",
+            "content": "<p>Katia Prpic-Tremblay travaille dans le secret de son atelier situé dans les Cantons-de-l'Est. Sa démarche artistique explore le dialogue constant entre le noir d'encre et le blanc du papier, une dualité qui structure également l'identité visuelle de notre revue.<\/p><h2>L'esthétique du vide<\/h2><p>Pour Katia, le blanc n'est pas une absence de dessin, mais un espace dynamique. « Le vide est ce qui permet au trait d'exister et de respirer », confie-t-elle lors de notre rencontre. Cette philosophie se ressent dans chaque mise en page de Salamandre Magazine, conçue comme une œuvre d'art à part entière.<\/p><p>Dans ses derniers travaux, elle intègre des pigments naturels et de la feuille d'or, créant des textures qui prennent vie sous la lumière directe.<\/p>",
+            "image": "uploads\/images\/blog_post_portrait.png",
+            "tags": [
+                "Arts Visuels",
+                "Portrait",
+                "Esthétique"
+            ],
+            "status": "published",
+            "date": "2026-05-20"
+        }
+    ],
+    "shop": [
+        {
+            "id": "prod-1",
+            "title": "Abonnement Annuel - Salamandre Magazine (4 numéros)",
+            "price": 45,
+            "image": "uploads\/images\/magazine_cover_default.png",
+            "description": "Recevez chez vous les 4 prochains numéros de Salamandre Magazine. Un magnifique objet imprimé sur papier d'art écoresponsable, livré directement dans votre boîte aux lettres. Inclus également l'accès complet aux versions numériques.",
+            "category": "abo",
+            "digital": false
+        },
+        {
+            "id": "prod-2",
+            "title": "Carnet d'Écriture Salamandre - Édition Limitée",
+            "price": 24,
+            "image": "uploads\/images\/shop_item_journal.png",
+            "description": "Un carnet de notes haut de gamme de 160 pages lignées. Papier 100g\/m² adapté à l'écriture à la plume. Couverture rigide en toile de lin embossée à l'or chaud d'une salamandre stylisée. Fabriqué localement.",
+            "category": "merch",
+            "digital": false
+        },
+        {
+            "id": "prod-3",
+            "title": "Sac Cabas (Tote Bag) - Coton Biologique",
+            "price": 18,
+            "image": "uploads\/images\/shop_item_tote.png",
+            "description": "Sac cabas robuste en coton biologique épais (340g\/m²). Sérigraphié à Montréal avec l'illustration originale de la salamandre. Parfait pour transporter vos magazines et lectures préférées.",
+            "category": "merch",
+            "digital": false
+        },
+        {
+            "id": "prod-4",
+            "title": "Numéro 12 : L'Éveil de la Matière (Version Numérique PDF)",
+            "price": 8,
+            "image": "uploads\/images\/magazine_cover_default.png",
+            "description": "Téléchargement immédiat du Numéro 12 en haute résolution PDF. Visionnable en ligne sur notre liseur premium avec toutes les fonctionnalités interactives (vidéos et publicités intégrées).",
+            "category": "num",
+            "digital": true,
+            "download_url": "uploads\/magazines\/numero_12.pdf"
+        }
+    ],
+    "statistics": {
+        "page_reads": {
+            "mag-1_1": 167,
+            "mag-1_2": 180,
+            "mag-1_3": 140,
+            "mag-1_4": 147,
+            "mag-1_5": 93,
+            "mag-1_6": 91,
+            "mag-6a2baabd5b937_1": 13,
+            "mag-6a2baabd5b937_2": 11,
+            "mag-6a2baabd5b937_3": 6,
+            "mag-6a2baabd5b937_6": 8,
+            "mag-6a2baabd5b937_7": 5,
+            "mag-6a2baabd5b937_10": 3,
+            "mag-6a2baabd5b937_11": 2,
+            "mag-6a2baabd5b937_13": 2,
+            "mag-6a2baabd5b937_12": 4,
+            "mag-6a2baabd5b937_16": 1,
+            "mag-6a2baabd5b937_17": 1,
+            "mag-6a2baabd5b937_9": 4,
+            "mag-6a2baabd5b937_8": 6,
+            "mag-6a2baabd5b937_5": 6,
+            "mag-6a2baabd5b937_4": 10,
+            "mag-6a2baabd5b937_14": 1
+        },
+        "total_views": 901,
+        "views_by_day": {
+            "2026-06-05": 42,
+            "2026-06-06": 55,
+            "2026-06-07": 48,
+            "2026-06-08": 67,
+            "2026-06-09": 83,
+            "2026-06-10": 112,
+            "2026-06-11": 95,
+            "2026-06-12": 185
+        }
+    },
+    "settings": {
+        "featured_mag_id": "mag-1",
+        "custom_cover_path": ""
+    }
+}
