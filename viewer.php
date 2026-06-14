@@ -7,7 +7,7 @@ $has_id = !empty($magazine_id);
 <html lang="fr" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Salamandre Magazine - Liseur</title>
     <!-- Fonts -->
     <link rel="stylesheet" href="assets/css/style.css?v=<?php echo time(); ?>">

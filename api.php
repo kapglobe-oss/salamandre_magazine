@@ -206,6 +206,42 @@ switch ($action) {
         echo json_encode($db['shop'] ?? []);
         break;
 
+    case 'track_ad_click':
+        $id = isset($_GET['id']) ? clean_input($_GET['id']) : '';
+        if (empty($id)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Identifiant publicitaire manquant.']);
+            exit();
+        }
+        
+        $found_ad = null;
+        foreach ($db['ads'] as &$ad) {
+            if ($ad['id'] === $id) {
+                if (!isset($ad['clicks'])) $ad['clicks'] = 0;
+                $ad['clicks']++;
+                
+                // If CPC, calculate earnings
+                if (isset($ad['pricing_model']) && $ad['pricing_model'] === 'cpc') {
+                    if (!isset($ad['earnings'])) $ad['earnings'] = 0;
+                    $ad['earnings'] = $ad['clicks'] * floatval($ad['price']);
+                }
+                
+                $found_ad = $ad;
+                break;
+            }
+        }
+        
+        if ($found_ad) {
+            save_db($db);
+            header("Location: " . html_entity_decode($found_ad['link_url']));
+            exit();
+        } else {
+            http_response_code(404);
+            echo json_encode(['error' => 'Publicité introuvable.']);
+            exit();
+        }
+        break;
+
     // ADMIN ENDPOINTS (PROTECTED)
     default:
         // Everything below requires admin authorization
@@ -219,6 +255,100 @@ switch ($action) {
         switch ($action) {
             case 'get_stats':
                 echo json_encode($db['statistics'] ?? []);
+                break;
+
+            // AD CAMPAIGNS CRUD (ADMIN)
+            case 'get_ads_admin':
+                echo json_encode($db['ads'] ?? []);
+                break;
+
+            case 'add_ad':
+                $input = json_decode(file_get_contents('php://input'), true);
+                if (empty($input['client_name']) || empty($input['title']) || empty($input['banner_path']) || empty($input['link_url'])) {
+                    http_response_code(400);
+                    echo json_encode(['error' => 'Champs obligatoires manquants.']);
+                    exit();
+                }
+
+                $new_ad = [
+                    'id' => 'ad-' . uniqid(),
+                    'client_name' => clean_input($input['client_name']),
+                    'title' => clean_input($input['title']),
+                    'banner_path' => sanitize_web_path($input['banner_path']),
+                    'link_url' => clean_input($input['link_url']),
+                    'location' => clean_input($input['location'] ?? 'homepage'),
+                    'pricing_model' => clean_input($input['pricing_model'] ?? 'flat'),
+                    'price' => floatval($input['price'] ?? 0),
+                    'status' => clean_input($input['status'] ?? 'active'),
+                    'clicks' => 0,
+                    'impressions' => 0,
+                    'earnings' => ($input['pricing_model'] === 'flat') ? floatval($input['price'] ?? 0) : 0,
+                    'start_date' => clean_input($input['start_date'] ?? ''),
+                    'end_date' => clean_input($input['end_date'] ?? '')
+                ];
+
+                if (!isset($db['ads'])) $db['ads'] = [];
+                $db['ads'][] = $new_ad;
+                save_db($db);
+                echo json_encode($new_ad);
+                break;
+
+            case 'update_ad':
+                $input = json_decode(file_get_contents('php://input'), true);
+                $id = isset($input['id']) ? clean_input($input['id']) : '';
+
+                $updated = false;
+                foreach ($db['ads'] as &$ad) {
+                    if ($ad['id'] === $id) {
+                        $ad['client_name'] = clean_input($input['client_name'] ?? $ad['client_name']);
+                        $ad['title'] = clean_input($input['title'] ?? $ad['title']);
+                        $ad['banner_path'] = isset($input['banner_path']) ? sanitize_web_path($input['banner_path']) : $ad['banner_path'];
+                        $ad['link_url'] = clean_input($input['link_url'] ?? $ad['link_url']);
+                        $ad['location'] = clean_input($input['location'] ?? $ad['location']);
+                        
+                        $ad['pricing_model'] = clean_input($input['pricing_model'] ?? $ad['pricing_model']);
+                        $ad['price'] = floatval($input['price'] ?? $ad['price']);
+                        
+                        // Recalculate earnings
+                        if ($ad['pricing_model'] === 'flat') {
+                            $ad['earnings'] = $ad['price'];
+                        } else {
+                            $ad['earnings'] = ($ad['clicks'] ?? 0) * $ad['price'];
+                        }
+
+                        $ad['status'] = clean_input($input['status'] ?? $ad['status']);
+                        $ad['start_date'] = clean_input($input['start_date'] ?? $ad['start_date']);
+                        $ad['end_date'] = clean_input($input['end_date'] ?? $ad['end_date']);
+                        $updated = true;
+                        break;
+                    }
+                }
+                if ($updated) {
+                    save_db($db);
+                    echo json_encode(['success' => true]);
+                } else {
+                    http_response_code(404);
+                    echo json_encode(['error' => 'Campagne pub non trouvée.']);
+                }
+                break;
+
+            case 'delete_ad':
+                $id = isset($_GET['id']) ? clean_input($_GET['id']) : '';
+                $index = -1;
+                foreach ($db['ads'] as $idx => $ad) {
+                    if ($ad['id'] === $id) {
+                        $index = $idx;
+                        break;
+                    }
+                }
+                if ($index !== -1) {
+                    array_splice($db['ads'], $index, 1);
+                    save_db($db);
+                    echo json_encode(['success' => true]);
+                } else {
+                    http_response_code(404);
+                    echo json_encode(['error' => 'Campagne pub non trouvée.']);
+                }
                 break;
 
             case 'get_settings':

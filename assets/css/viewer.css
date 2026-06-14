@@ -78,6 +78,12 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
+.page.dummy-page {
+  background: transparent !important;
+  box-shadow: none !important;
+  pointer-events: none;
+}
+
 /* Canvas render */
 .page-canvas {
   width: 100%;
@@ -627,11 +633,20 @@
   }
   
   .viewer-controls {
-    width: 95%;
-    justify-content: space-between;
-    bottom: 15px;
-    padding: 0.5rem 0.8rem;
-    gap: 0.5rem;
+    width: 85%;
+    justify-content: space-around;
+    bottom: 20px;
+    padding: 0.6rem 1rem;
+    gap: 0;
+  }
+
+  .viewer-controls #first-btn,
+  .viewer-controls #last-btn,
+  .viewer-controls #zoomin-btn,
+  .viewer-controls #zoomout-btn,
+  .viewer-controls #fullscreen-btn,
+  .viewer-controls span {
+    display: none !important;
   }
   
   .viewer-header {

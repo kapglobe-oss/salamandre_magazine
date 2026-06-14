@@ -55,6 +55,12 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                     </div>
                 </li>
                 <li>
+                    <div class="admin-nav-link" data-tab="ads">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                        <span>Régie Pub</span>
+                    </div>
+                </li>
+                <li>
                     <div class="admin-nav-link" data-tab="settings">
                         <svg viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
                         <span>Paramètres</span>
@@ -124,6 +130,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                     <table class="admin-table">
                         <thead>
                             <tr>
+                                <th>Couverture</th>
                                 <th>Titre du magazine</th>
                                 <th>Date de publication</th>
                                 <th>Overlays</th>
@@ -370,6 +377,54 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                 </div>
             </div>
 
+            <!-- TAB 6: AD CAMPAIGNS (RÉGIE PUB) -->
+            <div id="tab-ads" class="admin-tab-content">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+                    <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">Régie Publicitaire</h3>
+                    <button class="btn btn-gold" onclick="openModal('modal-ad')" style="padding: 0.6rem 1.2rem; font-size: 0.8rem; border-radius: 4px;">Créer une campagne</button>
+                </div>
+
+                <!-- Ad KPI Cards -->
+                <div class="dashboard-stats-grid">
+                    <div class="admin-card">
+                        <div class="admin-card-val" id="stat-ads-total">0</div>
+                        <div class="admin-card-lbl">Campagnes actives</div>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-card-val" id="stat-ads-impressions">0</div>
+                        <div class="admin-card-lbl">Impressions</div>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-card-val" id="stat-ads-clicks">0</div>
+                        <div class="admin-card-lbl">Clics</div>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-card-val" id="stat-ads-revenue">0.00 $</div>
+                        <div class="admin-card-lbl">Chiffre d'affaires</div>
+                    </div>
+                </div>
+
+                <div class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Client & Campagne</th>
+                                <th>Emplacement</th>
+                                <th>Modèle</th>
+                                <th>Tarif</th>
+                                <th>Impressions / Clics / CTR</th>
+                                <th>Revenu généré</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ads-table-body">
+                            <!-- JS populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- TAB 5: SETTINGS -->
             <div id="tab-settings" class="admin-tab-content">
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; align-items: start;">
@@ -570,6 +625,87 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
                 <div style="display:flex; justify-content:flex-end; gap: 1rem; margin-top: 2rem;">
                     <button type="button" onclick="closeModal('modal-shop')" class="btn btn-secondary" style="padding:0.6rem 1.2rem; font-size:0.8rem; border-radius:4px;">Annuler</button>
+                    <button type="submit" class="btn btn-gold" style="padding:0.6rem 1.2rem; font-size:0.8rem; border-radius:4px;">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD/EDIT AD CAMPAIGN -->
+    <div id="modal-ad" class="admin-modal">
+        <div class="admin-modal-box">
+            <h3 style="font-family: var(--font-serif); font-size: 1.4rem; margin-bottom: 1.5rem;">Détails de la campagne</h3>
+            <form id="ad-form">
+                <input type="hidden" id="ad-id">
+                
+                <div class="admin-form-group">
+                    <label>Nom du Client</label>
+                    <input type="text" id="ad-client" class="admin-form-control" required placeholder="Ex: Art & Lettres Éditions">
+                </div>
+
+                <div class="admin-form-group">
+                    <label>Titre de la Campagne (Slogan / Alt)</label>
+                    <input type="text" id="ad-title" class="admin-form-control" required placeholder="Ex: Découvrez les nouveaux poètes">
+                </div>
+
+                <div class="admin-form-group">
+                    <label>Bannière Publicitaire (Image)</label>
+                    <input type="text" id="ad-banner-path" class="admin-form-control" required placeholder="uploads/images/...">
+                    <input type="file" style="margin-top:0.5rem; font-size:0.8rem;" accept="image/*" onchange="handleFileUpload(this, 'ad-banner-path', 'image')">
+                    <span style="font-size:0.75rem; color:#888; display:block; margin-top:0.2rem;">Téléverser une bannière (recommandé: horizontal, min 728px de large)</span>
+                </div>
+
+                <div class="admin-form-group">
+                    <label>Lien de redirection (URL cible)</label>
+                    <input type="url" id="ad-link-url" class="admin-form-control" required placeholder="https://sitepartenaire.com/promo">
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+                    <div class="admin-form-group">
+                        <label>Emplacement Stratégique</label>
+                        <select id="ad-location" class="admin-form-control">
+                            <option value="header">Bannière en-tête (Header)</option>
+                            <option value="homepage">Milieu de page d'accueil</option>
+                            <option value="sidebar">Sidebar/Articles (Blog)</option>
+                            <option value="footer">Bas de page (Footer)</option>
+                        </select>
+                    </div>
+                    <div class="admin-form-group">
+                        <label>Modèle de Facturation</label>
+                        <select id="ad-model" class="admin-form-control">
+                            <option value="flat">Forfait fixe (Flat rate)</option>
+                            <option value="cpc">Coût par clic (CPC)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1.2fr; gap:1.5rem;">
+                    <div class="admin-form-group">
+                        <label>Prix / Tarif ($)</label>
+                        <input type="number" id="ad-price" class="admin-form-control" step="0.01" required placeholder="Ex: 150.00 ou 0.50">
+                    </div>
+                    <div class="admin-form-group">
+                        <label>Statut initial</label>
+                        <select id="ad-status" class="admin-form-control">
+                            <option value="active">Active (En diffusion)</option>
+                            <option value="paused">En pause</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+                    <div class="admin-form-group">
+                        <label>Date de début</label>
+                        <input type="date" id="ad-start-date" class="admin-form-control">
+                    </div>
+                    <div class="admin-form-group">
+                        <label>Date de fin</label>
+                        <input type="date" id="ad-end-date" class="admin-form-control">
+                    </div>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" onclick="closeModal('modal-ad')" class="btn btn-secondary" style="padding:0.6rem 1.2rem; font-size:0.8rem; border-radius:4px;">Annuler</button>
                     <button type="submit" class="btn btn-gold" style="padding:0.6rem 1.2rem; font-size:0.8rem; border-radius:4px;">Enregistrer</button>
                 </div>
             </form>

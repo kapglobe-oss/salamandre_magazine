@@ -40,6 +40,19 @@ include 'header.php';
     </div>
 </div>
 
+<!-- Sidebar/Blog Ad Banner -->
+<?php
+$sidebar_ad = get_and_track_ad('sidebar');
+if ($sidebar_ad):
+?>
+    <div style="max-width: 970px; margin: 2rem auto 0; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.5rem; text-align: center; border-radius: 4px; position: relative;">
+        <span style="position: absolute; top: -10px; left: 15px; background: var(--bg-primary); padding: 0 8px; font-size: 0.55rem; color: var(--text-muted); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Publicité Partenaire</span>
+        <a href="api.php?action=track_ad_click&id=<?php echo $sidebar_ad['id']; ?>" target="_blank" style="display: block; overflow: hidden; border-radius: 2px;">
+            <img src="<?php echo $sidebar_ad['banner_path']; ?>" alt="<?php echo htmlspecialchars($sidebar_ad['title']); ?>" style="width: 100%; height: auto; max-height: 120px; object-fit: cover; display: block;">
+        </a>
+    </div>
+<?php endif; ?>
+
 <div class="section" style="padding-top: 3rem;">
     <!-- Tag filters -->
     <div style="display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 4rem;">

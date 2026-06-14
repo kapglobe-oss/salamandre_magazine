@@ -4,6 +4,42 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 $current_page = basename($_SERVER['PHP_SELF']);
+
+if (!function_exists('get_and_track_ad')) {
+    function get_and_track_ad($location) {
+        $db_file = __DIR__ . '/data/database.json';
+        if (!file_exists($db_file)) return null;
+        $db = json_decode(file_get_contents($db_file), true);
+        if (empty($db['ads'])) return null;
+        
+        $active_ads = array_filter($db['ads'], function($a) use ($location) {
+            $status_ok = isset($a['status']) && $a['status'] === 'active';
+            $today = date('Y-m-d');
+            $date_ok = true;
+            if (!empty($a['start_date']) && $a['start_date'] > $today) $date_ok = false;
+            if (!empty($a['end_date']) && $a['end_date'] < $today) $date_ok = false;
+            return $status_ok && $date_ok && $a['location'] === $location;
+        });
+        
+        if (empty($active_ads)) return null;
+        
+        // Pick random active ad
+        $ad_to_show = $active_ads[array_rand($active_ads)];
+        
+        // Track impression
+        foreach ($db['ads'] as &$ad) {
+            if ($ad['id'] === $ad_to_show['id']) {
+                if (!isset($ad['impressions'])) $ad['impressions'] = 0;
+                $ad['impressions']++;
+                break;
+            }
+        }
+        
+        // Save database
+        file_put_contents($db_file, json_encode($db, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        return $ad_to_show;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr" data-theme="light">
@@ -23,6 +59,21 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
     <!-- Header Navigation -->
     <header>
+        <?php 
+        $header_ad = get_and_track_ad('header');
+        if ($header_ad): 
+        ?>
+            <style>
+                main, .hero, .magazine-picker { margin-top: 190px !important; }
+                header { height: auto !important; }
+            </style>
+            <div class="ad-banner-header" style="background: var(--bg-secondary); text-align: center; padding: 0.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; width: 100%;">
+                <a href="api.php?action=track_ad_click&id=<?php echo $header_ad['id']; ?>" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 1rem; height: 90px; text-decoration: none;">
+                    <span style="background: var(--accent-gold); color: #000; font-size: 0.65rem; padding: 3px 8px; font-weight: 800; border-radius: 2px;">SPONSORISÉ</span>
+                    <img src="<?php echo $header_ad['banner_path']; ?>" alt="<?php echo htmlspecialchars($header_ad['title']); ?>" style="max-height: 90px; width: auto; display: block; object-fit: contain;">
+                </a>
+            </div>
+        <?php endif; ?>
         <div class="nav-container">
             <a href="index.php" class="logo">
                 <!-- Golden/Bronze Salamander Vector SVG -->

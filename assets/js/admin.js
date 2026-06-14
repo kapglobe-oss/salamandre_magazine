@@ -14,7 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             navLinks.forEach(l => l.classList.remove('active'));
-            tabContents.forEach(c => c.classList.remove('active'));
+            tabContents.forEach(c => {
+                c.classList.remove('active');
+                c.style.display = '';
+            });
 
             link.classList.add('active');
             const targetEl = document.getElementById(`tab-${targetTab}`);
@@ -26,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (targetTab === 'blog') loadBlog();
             if (targetTab === 'shop') loadShop();
             if (targetTab === 'settings') loadSettings();
+            if (targetTab === 'ads') loadAds();
         });
     });
 
@@ -146,12 +150,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!tbody) return;
 
         if (magazinesList.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#666;">Aucun magazine.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#666;">Aucun magazine.</td></tr>';
             return;
         }
 
         tbody.innerHTML = magazinesList.map(mag => `
             <tr>
+                <td style="width: 60px; text-align: center;">
+                    <img src="../${mag.cover_path}" alt="Couverture" style="width: 50px; height: auto; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                </td>
                 <td style="font-weight:600;">${mag.title}</td>
                 <td>${mag.pub_date}</td>
                 <td>${mag.pages ? mag.pages.length : 0} pages</td>
@@ -377,6 +384,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     for (let i = 1; i <= pdf.numPages; i++) {
                         builderPages.push({ type: 'pdf', pdf_page_num: i, widgets: [] });
                     }
+                    // Auto-save the initialized pages to the server so the table shows the correct count immediately
+                    fetch('../api.php?action=initialize_pdf_pages', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ magazine_id: builderActiveMag.id, num_pages: pdf.numPages })
+                    });
                 }
                 
                 renderBuilderPagesList();
@@ -402,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.closeBuilder = function() {
         document.getElementById('builder-section').style.display = 'none';
-        document.getElementById('tab-magazines').style.display = 'block';
+        document.getElementById('tab-magazines').style.display = '';
         loadMagazines(); // Refresh list to sync page counts
     };
 
@@ -1637,10 +1650,176 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => {
                 console.error(err);
                 statusEl.textContent = "Erreur lors de l'enregistrement.";
+                statusEl.textContent = "Erreur lors de l'enregistrement.";
                 statusEl.style.color = "#e35461";
             });
         });
     }
+
+    // ==========================================
+    // 8. AD CAMPAIGNS (RÉGIE PUB) MANAGEMENT
+    // ==========================================
+    let adsList = [];
+
+    function loadAds() {
+        fetch('../api.php?action=get_ads_admin')
+            .then(res => res.json())
+            .then(data => {
+                adsList = data;
+                renderAdsKPIs();
+                renderAdsTable();
+            })
+            .catch(err => console.error("Erreur chargement campagnes pub:", err));
+    }
+
+    function renderAdsKPIs() {
+        const activeCount = adsList.filter(ad => ad.status === 'active').length;
+        const totalImpressions = adsList.reduce((sum, ad) => sum + (parseInt(ad.impressions) || 0), 0);
+        const totalClicks = adsList.reduce((sum, ad) => sum + (parseInt(ad.clicks) || 0), 0);
+        const totalRevenue = adsList.reduce((sum, ad) => sum + (parseFloat(ad.earnings) || 0), 0);
+
+        document.getElementById('stat-ads-total').textContent = activeCount;
+        document.getElementById('stat-ads-impressions').textContent = totalImpressions;
+        document.getElementById('stat-ads-clicks').textContent = totalClicks;
+        document.getElementById('stat-ads-revenue').textContent = `${totalRevenue.toFixed(2)} $`;
+    }
+
+    function renderAdsTable() {
+        const tbody = document.getElementById('ads-table-body');
+        if (!tbody) return;
+
+        if (adsList.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:#666;">Aucune campagne publicitaire.</td></tr>';
+            return;
+        }
+
+        const locationLabels = {
+            'header': 'En-tête (Header)',
+            'homepage': 'Page d\'accueil',
+            'sidebar': 'Sidebar/Blog',
+            'footer': 'Bas de page (Footer)'
+        };
+
+        const modelLabels = {
+            'flat': 'Forfait fixe',
+            'cpc': 'Coût par clic (CPC)'
+        };
+
+        tbody.innerHTML = adsList.map(ad => {
+            const impressions = parseInt(ad.impressions) || 0;
+            const clicks = parseInt(ad.clicks) || 0;
+            const ctr = impressions > 0 ? ((clicks / impressions) * 100).toFixed(2) : '0.00';
+            const price = parseFloat(ad.price) || 0;
+            const revenue = parseFloat(ad.earnings) || 0;
+            
+            const statusColor = ad.status === 'active' ? '#50E3C2' : '#888';
+            const statusLabel = ad.status === 'active' ? 'Active' : 'En pause';
+
+            return `
+                <tr>
+                    <td>
+                        <div style="font-weight:600; color:#fff;">${ad.client_name}</div>
+                        <div style="font-size:0.75rem; color:#888;">${ad.title}</div>
+                    </td>
+                    <td style="font-size:0.85rem;">${locationLabels[ad.location] || ad.location}</td>
+                    <td style="font-size:0.85rem;">${modelLabels[ad.pricing_model] || ad.pricing_model}</td>
+                    <td style="font-size:0.85rem; font-weight:600;">${price.toFixed(2)} $</td>
+                    <td style="font-size:0.85rem;">
+                        <div>${impressions} Imp. / ${clicks} Clics</div>
+                        <div style="font-size:0.75rem; color:var(--accent-gold); font-weight:600;">CTR: ${ctr}%</div>
+                    </td>
+                    <td style="font-size:0.9rem; font-weight:700; color:#50E3C2;">${revenue.toFixed(2)} $</td>
+                    <td>
+                        <span style="font-size:0.75rem; padding:0.2rem 0.5rem; background:rgba(255,255,255,0.03); border:1px solid ${statusColor}; color:${statusColor}; border-radius:3px; font-weight:600; cursor:pointer;" onclick="toggleAdStatus('${ad.id}')">
+                            ${statusLabel}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="admin-btn-action" onclick="editAd('${ad.id}')">Éditer</button>
+                        <button class="admin-btn-action admin-btn-danger" onclick="deleteAd('${ad.id}')">Supprimer</button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    document.getElementById('ad-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('ad-id').value;
+        const client_name = document.getElementById('ad-client').value;
+        const title = document.getElementById('ad-title').value;
+        const banner_path = sanitizeWebPath(document.getElementById('ad-banner-path').value);
+        const link_url = document.getElementById('ad-link-url').value;
+        const location = document.getElementById('ad-location').value;
+        const pricing_model = document.getElementById('ad-model').value;
+        const price = document.getElementById('ad-price').value;
+        const status = document.getElementById('ad-status').value;
+        const start_date = document.getElementById('ad-start-date').value;
+        const end_date = document.getElementById('ad-end-date').value;
+
+        const action = id ? 'update_ad' : 'add_ad';
+        const payload = { 
+            id, client_name, title, banner_path, link_url, 
+            location, pricing_model, price, status, start_date, end_date 
+        };
+
+        fetch(`../api.php?action=${action}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(() => {
+            closeModal('modal-ad');
+            loadAds();
+            document.getElementById('ad-form').reset();
+            document.getElementById('ad-id').value = '';
+        })
+        .catch(err => console.error("Erreur enregistrement campagne:", err));
+    });
+
+    window.editAd = function(id) {
+        const ad = adsList.find(a => a.id === id);
+        if (!ad) return;
+
+        document.getElementById('ad-id').value = ad.id;
+        document.getElementById('ad-client').value = ad.client_name;
+        document.getElementById('ad-title').value = ad.title;
+        document.getElementById('ad-banner-path').value = ad.banner_path;
+        document.getElementById('ad-link-url').value = ad.link_url;
+        document.getElementById('ad-location').value = ad.location;
+        document.getElementById('ad-model').value = ad.pricing_model;
+        document.getElementById('ad-price').value = ad.price;
+        document.getElementById('ad-status').value = ad.status;
+        document.getElementById('ad-start-date').value = ad.start_date || '';
+        document.getElementById('ad-end-date').value = ad.end_date || '';
+
+        openModal('modal-ad');
+    };
+
+    window.deleteAd = function(id) {
+        if (!confirm("Voulez-vous vraiment supprimer cette campagne ?")) return;
+
+        fetch(`../api.php?action=delete_ad&id=${id}`, { method: 'DELETE' })
+            .then(res => res.json())
+            .then(() => loadAds())
+            .catch(err => console.error("Erreur suppression:", err));
+    };
+
+    window.toggleAdStatus = function(id) {
+        const ad = adsList.find(a => a.id === id);
+        if (!ad) return;
+
+        const newStatus = ad.status === 'active' ? 'paused' : 'active';
+        fetch(`../api.php?action=update_ad`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: ad.id, status: newStatus })
+        })
+        .then(res => res.json())
+        .then(() => loadAds())
+        .catch(err => console.error("Erreur basculement statut:", err));
+    };
 
     let resizeTimer;
     window.addEventListener('resize', () => {

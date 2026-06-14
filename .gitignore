@@ -1,13 +1,32 @@
-# Ignore uploads directory due to large files (PDFs, EXEs)
+# Uploads (large files - PDFs, images, etc.)
 uploads/
+
+# Database (JSON for dev, secrets for prod)
+data/database.json
+.env
+.env.local
+*.sql
 
 # System and IDE files
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
 
 # SSH keys
-id_*
-*.pub
+id_rsa
+id_rsa.pub
 
+# Logs
+logs/
+*.log
+
+# Cache
+.cache/
+*.tmp
+
+# OS
+desktop.ini

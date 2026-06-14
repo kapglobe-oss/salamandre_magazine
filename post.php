@@ -85,6 +85,19 @@ include 'header.php';
         ?>
     </div>
 
+    <!-- Article Ad Banner -->
+    <?php
+    $sidebar_ad = get_and_track_ad('sidebar');
+    if ($sidebar_ad):
+    ?>
+        <div style="margin: 3rem 0; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.5rem; text-align: center; border-radius: 4px; position: relative;">
+            <span style="position: absolute; top: -10px; left: 15px; background: var(--bg-primary); padding: 0 8px; font-size: 0.55rem; color: var(--text-muted); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Publicité Partenaire</span>
+            <a href="api.php?action=track_ad_click&id=<?php echo $sidebar_ad['id']; ?>" target="_blank" style="display: block; overflow: hidden; border-radius: 2px;">
+                <img src="<?php echo $sidebar_ad['banner_path']; ?>" alt="<?php echo htmlspecialchars($sidebar_ad['title']); ?>" style="width: 100%; height: auto; max-height: 150px; object-fit: cover; display: block;">
+            </a>
+        </div>
+    <?php endif; ?>
+
     <!-- Article Footer / Share buttons -->
     <footer style="margin-top: 5rem; padding-top: 2rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; position: static; background: none; border-bottom: none; flex-wrap: wrap; gap: 2rem;">
         <div style="display: flex; align-items: center; gap: 1rem;">

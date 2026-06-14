@@ -50,18 +50,16 @@ include 'header.php';
             <p class="hero-desc">Explorez des essais profonds, de la poésie inspirante et des portfolios artistiques à travers notre liseur de magazine interactif haut de gamme.</p>
             
             <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
-                <?php if ($featured_mag): ?>
-                    <a href="viewer.php?id=<?php echo $featured_mag['id']; ?>" class="btn btn-primary">Découvrir le numéro</a>
-                <?php else: ?>
-                    <a href="viewer.php?id=mag-1" class="btn btn-primary">Découvrir le numéro</a>
-                <?php endif; ?>
+                <a href="viewer.php" class="btn btn-primary">Découvrir le liseur</a>
                 <a href="shop.php" class="btn btn-secondary">Visiter la boutique</a>
             </div>
         </div>
         
         <div class="hero-visual">
             <div class="hero-book-shadow"></div>
-            <img src="<?php echo $homepage_cover; ?>" alt="Couverture Magazine" class="hero-book">
+            <a href="viewer.php" style="display: block; z-index: 1;">
+                <img src="<?php echo $homepage_cover; ?>" alt="Couverture Magazine" class="hero-book">
+            </a>
         </div>
     </div>
 </section>
@@ -105,6 +103,21 @@ include 'header.php';
         </div>
     </div>
 </section>
+
+<!-- Homepage Ad Banner -->
+<?php
+$homepage_ad = get_and_track_ad('homepage');
+if ($homepage_ad):
+?>
+    <section style="padding: 3rem 2rem 1rem; background: var(--bg-primary); text-align: center;">
+        <div style="max-width: 970px; margin: 0 auto; position: relative; border: 1px solid var(--border-color); padding: 0.5rem; background: var(--bg-secondary); border-radius: 4px;">
+            <span style="position: absolute; top: -10px; left: 15px; background: var(--bg-primary); padding: 0 8px; font-size: 0.6rem; color: var(--text-muted); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;">Partenaire</span>
+            <a href="api.php?action=track_ad_click&id=<?php echo $homepage_ad['id']; ?>" target="_blank" style="display: block; overflow: hidden; border-radius: 2px;">
+                <img src="<?php echo $homepage_ad['banner_path']; ?>" alt="<?php echo htmlspecialchars($homepage_ad['title']); ?>" style="width: 100%; height: auto; max-height: 200px; object-fit: cover; display: block; transition: var(--transition-smooth);" onmouseover="this.style.transform='scale(1.01)';" onmouseout="this.style.transform='scale(1)';">
+            </a>
+        </div>
+    </section>
+<?php endif; ?>
 
 <!-- Blog Section Preview -->
 <section class="section">

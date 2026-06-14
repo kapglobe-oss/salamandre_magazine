@@ -1,4 +1,17 @@
-    </main>
+    <!-- Footer Ad Banner -->
+    <?php
+    $footer_ad = get_and_track_ad('footer');
+    if ($footer_ad):
+    ?>
+        <div class="ad-banner-footer" style="background: var(--bg-secondary); border-top: 1px solid var(--border-color); padding: 1.5rem 2rem 0.5rem; text-align: center;">
+            <div style="max-width: 728px; margin: 0 auto; position: relative;">
+                <span style="position: absolute; top: -22px; left: 50%; transform: translateX(-50%); background: var(--bg-secondary); padding: 0 10px; font-size: 0.55rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Annonce Partenaire</span>
+                <a href="api.php?action=track_ad_click&id=<?php echo $footer_ad['id']; ?>" target="_blank" style="display: inline-block; max-width: 100%; overflow: hidden; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); padding: 0.2rem;">
+                    <img src="<?php echo $footer_ad['banner_path']; ?>" alt="<?php echo htmlspecialchars($footer_ad['title']); ?>" style="max-height: 90px; width: auto; max-width: 100%; display: block; object-fit: contain;">
+                </a>
+            </div>
+        </div>
+    <?php endif; ?>
 
     <!-- Footer -->
     <footer>
@@ -17,7 +30,7 @@
                 <h4 class="footer-links-title">Explorer</h4>
                 <ul class="footer-links-list">
                     <li><a href="index.php">Accueil</a></li>
-                    <li><a href="viewer.php?id=mag-1">Visionneuse</a></li>
+                    <li><a href="viewer.php">Visionneuse</a></li>
                     <li><a href="blog.php">Blogue littéraire</a></li>
                     <li><a href="shop.php">Boutique en ligne</a></li>
                 </ul>

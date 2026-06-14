@@ -198,4 +198,36 @@ include 'header.php';
     </div>
 </section>
 
+<!-- Livres de Soeur Angèle Section -->
+<section class="section" style="border-top: 1px solid var(--border-color); padding-top: 4rem; padding-bottom: 4rem;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+        <div class="section-header" style="text-align: center; margin-bottom: 4rem;">
+            <span class="section-subtitle">Boutique & Publications</span>
+            <h2 class="section-title" style="text-transform: uppercase;">RETROUVEZ LES LIVRES DE SŒUR ANGÈLE</h2>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; align-items: start;">
+            <!-- Book 1 -->
+            <div style="background: var(--bg-secondary); padding: 2.5rem; border-radius: 4px; border: 1px solid var(--border-color); text-align: center; transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 35px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                <div style="margin-bottom: 2rem; display: flex; justify-content: center;">
+                    <img src="uploads/images/51-768x994.png" alt="Livre Soeur Angèle" style="max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);" />
+                </div>
+                <h3 style="font-family: var(--font-serif); font-size: 1.35rem; margin-bottom: 0.5rem; color: var(--text-primary);">Un héritage culinaire</h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 2rem;">Découvrez ses recettes et son histoire inspirante à travers cet ouvrage incontournable.</p>
+                <a href="#" class="btn btn-gold" style="width: 100%; display: block; text-decoration: none;">Découvrir le livre</a>
+            </div>
+            
+            <!-- Book 2 -->
+            <div style="background: var(--bg-secondary); padding: 2.5rem; border-radius: 4px; border: 1px solid var(--border-color); text-align: center; transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 35px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                <div style="margin-bottom: 2rem; display: flex; justify-content: center;">
+                    <img src="uploads/images/Sortie-en-Aout-15-768x384.png" alt="Sortie en Août" style="max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);" />
+                </div>
+                <h3 style="font-family: var(--font-serif); font-size: 1.35rem; margin-bottom: 0.5rem; color: var(--text-primary);">Sortie en Août</h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 2rem;">La toute nouvelle parution à ne pas manquer pour les passionnés de cuisine.</p>
+                <a href="#" class="btn btn-gold" style="width: 100%; display: block; text-decoration: none;">Découvrir le livre</a>
+            </div>
+        </div>
+    </div>
+</section>
+
 <?php include 'footer.php'; ?>

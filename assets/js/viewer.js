@@ -293,6 +293,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupPageElements() {
         bookContainer.innerHTML = '';
         
+        const dummyStart = document.createElement('div');
+        dummyStart.className = 'page dummy-page';
+        dummyStart.dataset.density = 'soft';
+        dummyStart.style.cssText = 'background: transparent !important; box-shadow: none !important; pointer-events: none;';
+        dummyStart.innerHTML = `<div class="page-content" style="width:100%; height:100%; background:transparent;"></div>`;
+        bookContainer.appendChild(dummyStart);
+
         for (let i = 1; i <= totalPages; i++) {
             const pageDiv = document.createElement('div');
             pageDiv.className = 'page';
@@ -305,6 +312,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             bookContainer.appendChild(pageDiv);
+        }
+
+        if ((totalPages + 1) % 2 !== 0) {
+            const dummyEnd = document.createElement('div');
+            dummyEnd.className = 'page dummy-page';
+            dummyEnd.dataset.density = 'soft';
+            dummyEnd.style.cssText = 'background: transparent !important; box-shadow: none !important; pointer-events: none;';
+            dummyEnd.innerHTML = `<div class="page-content" style="width:100%; height:100%; background:transparent;"></div>`;
+            bookContainer.appendChild(dummyEnd);
         }
     }
 
@@ -322,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const pageElements = bookContainer.querySelectorAll('.page');
         const preRenderCount = Math.min(4, totalPages);
         for (let i = 1; i <= preRenderCount; i++) {
-            const pageDiv = pageElements[i - 1];
+            const pageDiv = pageElements[i];
             if (!pageDiv) continue;
             const canvas = pageDiv.querySelector('.page-canvas');
             const overlay = pageDiv.querySelector('.overlay-layer');
@@ -364,29 +380,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     minHeight: Math.round(finalMinWidth / pageAspect),
                     maxWidth: finalMaxWidth,
                     maxHeight: Math.round(finalMaxWidth / pageAspect),
-                    showCover: mergedConfig.showCover,
-                    startPage: mergedConfig.startPage,
+                    showCover: false, 
+                    startPage: (currentPage > 1) ? (currentPage % 2 === 0 ? currentPage : currentPage - 1) : 0,
                     drawShadow: mergedConfig.drawShadow,
                     maxShadowOpacity: mergedConfig.maxShadowOpacity,
                     showPageCorners: mergedConfig.showPageCorners,
                     usePortrait: mergedConfig.usePortrait,
                     flippingTime: mergedConfig.flippingTime,
+                    useMouseEvents: true,
                     mobileScrollSupport: false
                 };
                 pageFlip = new St.PageFlip(bookContainer, options);
                 // Load pages — canvases already have rendered content
                 pageFlip.loadFromHTML(bookContainer.querySelectorAll('.page'));
 
-                if (currentPage > 1) {
-                    pageFlip.turnToPage(currentPage - 1);
-                }
-
                 // Register event listeners AFTER pageFlip is created
                 pageFlip.on('flip', (e) => {
-                    currentPage = e.data + 1;
+                    const currentIndex = e.data; 
+                    const orientation = pageFlip.getOrientation();
+                    
+                    if (orientation === 'landscape') {
+                        if (currentIndex <= 0) currentPage = 1;
+                        else currentPage = currentIndex;
+                    } else {
+                        if (currentIndex === 0) {
+                            pageFlip.turnToPage(1);
+                            return;
+                        }
+                        if (currentIndex === totalPages + 1) {
+                            pageFlip.turnToPage(totalPages);
+                            return;
+                        }
+                        currentPage = currentIndex;
+                    }
                     
                     // Clear cache for visible pages to force redraw
-                    const orientation = pageFlip.getOrientation();
                     const activePages = [currentPage];
                     if (orientation === 'landscape' && currentPage > 1) {
                         if (currentPage % 2 === 0) {
@@ -398,7 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const allPageElements = bookContainer.querySelectorAll('.page');
                     activePages.forEach(pageNum => {
-                        const pageDiv = allPageElements[pageNum - 1];
+                        const pageDiv = allPageElements[pageNum];
                         if (pageDiv) {
                             const canvas = pageDiv.querySelector('.page-canvas');
                             if (canvas) canvas.removeAttribute('data-rendered');
@@ -427,13 +455,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderVisiblePages() {
         if (!pageFlip) return;
 
-        const range = 5; // Augmenter la plage de pré‑rendu pour que la page suivante soit visible
-        const start = Math.max(1, currentPage - range);
-        const end = Math.min(totalPages, currentPage + range);
+        const range = 5; 
+        const currentIndex = pageFlip.getCurrentPageIndex();
+        const start = Math.max(1, currentIndex - range);
+        const end = Math.min(totalPages, currentIndex + range + 2);
         const pageElements = bookContainer.querySelectorAll('.page');
 
         for (let i = 1; i <= totalPages; i++) {
-            const pageDiv = pageElements[i - 1];
+            const pageDiv = pageElements[i];
             if (!pageDiv) continue;
 
             const canvas = pageDiv.querySelector('.page-canvas');
@@ -667,26 +696,48 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!pageFlip) return;
 
         const orientation = pageFlip.getOrientation();
+        const currentIndex = pageFlip.getCurrentPageIndex();
+        
+        let displayPage = currentIndex;
         if (orientation === 'portrait') {
-            pageIndicator.textContent = `Page ${currentPage} / ${totalPages}`;
+            if (displayPage < 1) displayPage = 1;
+            if (displayPage > totalPages) displayPage = totalPages;
+            pageIndicator.textContent = `Page ${displayPage} / ${totalPages}`;
         } else {
-            if (currentPage === 1) {
+            if (currentIndex <= 0) {
                 pageIndicator.textContent = `Page 1 / ${totalPages}`;
+                displayPage = 1;
+            } else if (currentIndex >= totalPages) {
+                pageIndicator.textContent = `Page ${totalPages} / ${totalPages}`;
+                displayPage = totalPages;
             } else {
-                const rightPage = currentPage + 1 <= totalPages ? currentPage + 1 : null;
-                pageIndicator.textContent = rightPage 
-                    ? `Pages ${currentPage}-${rightPage} / ${totalPages}`
-                    : `Page ${currentPage} / ${totalPages}`;
+                const rightPage = currentIndex + 1;
+                displayPage = currentIndex;
+                if (rightPage > totalPages) {
+                     pageIndicator.textContent = `Page ${currentIndex} / ${totalPages}`;
+                } else {
+                     pageIndicator.textContent = `Pages ${currentIndex}-${rightPage} / ${totalPages}`;
+                }
             }
         }
 
-        const newUrl = `${window.location.pathname}?id=${magazineId}&page=${currentPage}`;
+        const newUrl = `${window.location.pathname}?id=${magazineId}&page=${displayPage}`;
         window.history.replaceState({ path: newUrl }, '', newUrl);
 
-        // Highlight thumbnail
+        let activeRealPages = [];
+        if (orientation === 'portrait') {
+            activeRealPages.push(displayPage);
+        } else {
+            if (currentIndex <= 0) activeRealPages.push(1);
+            else {
+                activeRealPages.push(currentIndex);
+                if (currentIndex + 1 <= totalPages) activeRealPages.push(currentIndex + 1);
+            }
+        }
+
         document.querySelectorAll('.thumbnail-item').forEach(item => {
             const pageNum = parseInt(item.dataset.page);
-            if (pageNum === currentPage || (orientation === 'landscape' && pageNum === currentPage + 1)) {
+            if (activeRealPages.includes(pageNum)) {
                 item.classList.add('active');
             } else {
                 item.classList.remove('active');
@@ -755,7 +806,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nextBtn) nextBtn.addEventListener('click', goNext);
     if (prevBtn) prevBtn.addEventListener('click', goPrev);
     if (firstBtn) firstBtn.addEventListener('click', () => pageFlip && pageFlip.turnToPage(0));
-    if (lastBtn) lastBtn.addEventListener('click', () => pageFlip && pageFlip.turnToPage(totalPages - 1));
+    if (lastBtn) lastBtn.addEventListener('click', () => {
+        if (pageFlip) {
+            let target = ((totalPages + 1) % 2 !== 0) ? totalPages : totalPages - 1;
+            pageFlip.turnToPage(target);
+        }
+    });
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight' || e.key === ' ') {
@@ -826,7 +882,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             item.addEventListener('click', () => {
                 if (pageFlip) {
-                    pageFlip.turnToPage(i - 1);
+                    let target = (i % 2 === 0) ? i : i - 1;
+                    if (i === 1) target = 0;
+                    pageFlip.turnToPage(target);
                 }
                 sidebar.classList.remove('open');
             });
